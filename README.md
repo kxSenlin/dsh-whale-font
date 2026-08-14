@@ -60,21 +60,15 @@ dsh plugin --profile web add github:kxSenlin/dsh-whale-font
 
 用 `dsh plugin --profile web list` 可以确认插件已在列表里。升级重跑同一条 `add` 命令即可。
 
-### 方式二：手动安装（离线 / 不想走 git）
+### 方式二：本地路径安装（离线 / 不想走 git）
 
-1. 把本仓库的 `lib/` 和 `package.json`、`cordis.patch.yml` 放到 `~/.dsh/profiles/node_modules/dsh-whale-font/` 下；
-2. 编辑 `~/.dsh/profiles/web/cordis.patch.yml`，在末尾加上：
+先把仓库下载到本地（`git clone https://github.com/kxSenlin/dsh-whale-font.git` 或下载 zip 解压），然后在**仓库目录下**执行：
 
-   ```yaml
-   - insert:
-       - id: whale-font
-         name: 'dsh-whale-font'
-   ```
+```bash
+dsh plugin --profile web add ./dsh-whale-font
+```
 
-   （若该文件原本只有 `[]`，就用上面三行替换 `[]`。）
-3. 重启 DSH 服务，浏览器强制刷新（`Ctrl + Shift + R`）。
-
-> 路径说明：`~` 是用户主目录 —— Windows 是 `C:\Users\<用户名>`，macOS/Linux 是 `/Users/<用户名>` 或 `/home/<用户名>`。
+和方式一一样，装完**重启 DSH 服务**、浏览器**强制刷新**（`Ctrl + Shift + R`）即可。两种方式装到的位置完全一致，之后调参、卸载都用同一套命令。
 
 ## 调整大小 / 位置（可选）
 
@@ -99,8 +93,6 @@ dsh plugin --profile web add github:kxSenlin/dsh-whale-font
 ```bash
 dsh plugin --profile web remove dsh-whale-font
 ```
-
-手动安装的，删除 `~/.dsh/profiles/node_modules/dsh-whale-font/` 目录，并删掉 `~/.dsh/profiles/web/cordis.patch.yml` 里那三行，再重启 DSH。
 
 ## 常见问题
 

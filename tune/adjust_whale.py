@@ -16,7 +16,7 @@ import json, re, base64, sys, os
 HERE = os.path.dirname(os.path.abspath(__file__))
 SVG = os.path.join(HERE, 'favicon.svg')
 OUT_FONT = os.path.join(HERE, 'whale-color.otf')
-OUT_CLIENT = os.path.expanduser('~/.dsh/profiles/node_modules/dsh-whale-font/lib/client.js')
+OUT_CLIENT = os.path.expanduser('~/.dsh/profiles/web/node_modules/dsh-whale-font/lib/client.js')
 
 from fontTools.fontBuilder import FontBuilder
 from fontTools.pens.t2CharStringPen import T2CharStringPen
