@@ -249,19 +249,26 @@ _js = r'''window.__ModuleLoader__.load({
         while (i < text.length) {
           var ch = text.charAt(i);
           if (QUOTES.indexOf(ch) !== -1) { flush(); frag.appendChild(document.createTextNode(ch)); inQuote = !inQuote; i++; continue; }
-          if (inQuote && (ch === "我" || ch === "你")) {
-            flush();
-            var q = document.createElement("span");
-            q.setAttribute("data-whale-quoted", "1");
-            q.style.cssText = "font-family:" + BASE + " !important;";
-            q.textContent = ch;
-            frag.appendChild(q);
-            changed = true;
-            i++;
-            continue;
+          if (inQuote) {
+            var isCJK = (ch === "我" || ch === "你");
+            var isI = (ch === "I" && !isWordCh(text.charAt(i - 1)) && !isWordCh(text.charAt(i + 1)));
+            var isMe = (ch === "m" && text.substr(i, 2) === "me" && !isWordCh(text.charAt(i - 1)) && !isWordCh(text.charAt(i + 2)));
+            if (isCJK || isI || isMe) {
+              flush();
+              var q = document.createElement("span");
+              q.setAttribute("data-whale-quoted", "1");
+              if (isCJK) q.style.cssText = "font-family:" + BASE + " !important;";
+              q.textContent = isMe ? "me" : ch;
+              frag.appendChild(q);
+              changed = true;
+              i += isMe ? 2 : 1;
+              continue;
+            }
+          } else if (ch === "I" && !isWordCh(text.charAt(i - 1)) && !isWordCh(text.charAt(i + 1))) {
+            flush(); frag.appendChild(makeIcon("I")); changed = true; i++; continue;
+          } else if (ch === "m" && text.substr(i, 2) === "me" && !isWordCh(text.charAt(i - 1)) && !isWordCh(text.charAt(i + 2))) {
+            flush(); frag.appendChild(makeIcon("me")); changed = true; i += 2; continue;
           }
-          if (!inQuote && ch === "I" && !isWordCh(text.charAt(i - 1)) && !isWordCh(text.charAt(i + 1))) { flush(); frag.appendChild(makeIcon("I")); changed = true; i++; continue; }
-          if (!inQuote && ch === "m" && text.substr(i, 2) === "me" && !isWordCh(text.charAt(i - 1)) && !isWordCh(text.charAt(i + 2))) { flush(); frag.appendChild(makeIcon("me")); changed = true; i += 2; continue; }
           buf += ch;
           i++;
         }
