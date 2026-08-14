@@ -72,7 +72,9 @@ dsh plugin --profile web add ./dsh-whale-font
 
 ## 调整大小 / 位置（可选）
 
-以下为默认参数，可按需调整：
+以下为默认参数，可按需调整。
+
+> 仅在使用调参脚本时需要 fonttools；日常安装与使用插件（查看鲸鱼效果）无需安装。
 
 1. `pip install fonttools`
 2. 编辑 `tune/whale-config.json`：
