@@ -95,7 +95,7 @@ belly_d = ''.join(contour_to_d(c) for c in belly_contours)
 
 UPEM = 1000
 def tx(x, y):
-    return (x * SCALE_X, (50.0 - y) * SCALE_Y - Y_OFFSET)
+    return ((x - _ox0) * SCALE_X + LSB, (50.0 - y) * SCALE_Y - Y_OFFSET)
 
 # diagnostic: transformed bounding box
 _xs, _ys = [], []
