@@ -1,0 +1,8 @@
+# dsh-whale-font bundle patch: mounts the whale-font client plugin into
+# a profile's web client. The host half (lib/index.js) is a no-op; the real
+# work lives in the browser half (lib/client.js) via `dsh.client`.
+#
+# Install: `dsh plugin --profile web add github:kxSenlin/dsh-whale-font`
+- insert:
+    - id: whale-font
+      name: 'dsh-whale-font'
