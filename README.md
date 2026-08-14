@@ -6,6 +6,16 @@
 
 纯显示层替换：不改动任何消息数据、不影响模型读取/记忆、输入框不受影响。一眼就能分辨出每句话的主语（说话者）。
 
+## 预览
+
+浅色模式：
+
+![浅色模式](assets/light-mode.png)
+
+深色模式（肚子/眼睛固定白色，不会变黑）：
+
+![深色模式](assets/dark-mode.png)
+
 ## 功能
 
 | 位置 | 效果 |
@@ -118,6 +128,9 @@ dsh-whale-font/
 │   ├── adjust_whale.py
 │   ├── whale-config.json
 │   └── favicon.svg
+├── assets/             README 预览截图
+│   ├── light-mode.png
+│   └── dark-mode.png
 ├── LICENSE
 └── README.md
 ```
