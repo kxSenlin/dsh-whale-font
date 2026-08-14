@@ -1,4 +1,6 @@
-# 🐋 dsh-whale-font
+# dsh-whale-font
+
+<p align="center"><img src="assets/whale.svg" width="80" height="80" alt="DeepSeek whale"></p>
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
@@ -20,9 +22,9 @@
 
 | 位置 | 效果 |
 |---|---|
-| 助手消息里的「我」 | → 🐋 鲸鱼 |
-| 你发送的「你」 | → 🐋 鲸鱼 |
-| 助手消息里的英文 `I`、`me`（独立单词） | → 🐋 鲸鱼 |
+| 助手消息里的「我」 | → <img src="assets/whale.svg" width="16" height="16" align="absmiddle"> 鲸鱼 |
+| 你发送的「你」 | → <img src="assets/whale.svg" width="16" height="16" align="absmiddle"> 鲸鱼 |
+| 助手消息里的英文 `I`、`me`（独立单词） | → <img src="assets/whale.svg" width="16" height="16" align="absmiddle"> 鲸鱼 |
 | 引号内的「你 / 我」（助手复读你的话时） | 保持原样 |
 | 代码块 `<code>` / `<pre>` 内 | 不替换 |
 | 输入框（正在打字） | 不替换 |
@@ -128,9 +130,10 @@ dsh-whale-font/
 │   ├── adjust_whale.py
 │   ├── whale-config.json
 │   └── favicon.svg
-├── assets/             README 预览截图
-│   ├── light-mode.png
-│   └── dark-mode.png
+├── assets/             README 配图
+│   ├── whale.svg       蓝色鲸鱼图标（正文里的鲸鱼）
+│   ├── light-mode.png  浅色模式截图
+│   └── dark-mode.png   深色模式截图
 ├── LICENSE
 └── README.md
 ```
