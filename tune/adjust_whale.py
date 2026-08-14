@@ -167,8 +167,10 @@ css_static = (".Sxvs8a_root,.Sxvs8a_root *{font-family:'WhaleWo'," + BASE + " !i
 icon_w = RAW_W * SCALE_X / 1000.0
 icon_h = RAW_H * SCALE_Y / 1000.0
 icon_va = ((50.0 - _oy1) * SCALE_Y - Y_OFFSET) / 1000.0
+icon_advance = ADVANCE / 1000.0
+icon_lsb = LSB / 1000.0
 icon_viewbox = f"{_ox0:.4f} {_oy0:.4f} {RAW_W:.4f} {RAW_H:.4f}"
-icon_style = f"display:inline-block;position:relative;overflow:hidden;width:{icon_w:.3f}em;height:{icon_h:.3f}em;vertical-align:{icon_va:.3f}em;line-height:1;"
+icon_style = f"display:inline-block;position:relative;overflow:hidden;width:{icon_advance:.3f}em;height:{icon_h:.3f}em;vertical-align:{icon_va:.3f}em;line-height:1;"
 
 _js = r'''window.__ModuleLoader__.load({
   id: "dsh-whale-font",
@@ -197,7 +199,7 @@ _js = r'''window.__ModuleLoader__.load({
           txt.setAttribute("aria-hidden", "true");
           txt.style.cssText = "position:absolute;left:0;top:0;color:transparent;-webkit-text-fill-color:transparent;font-size:1em;line-height:1;white-space:nowrap;pointer-events:none;";
           var svg = document.createElement("span");
-          svg.style.cssText = "position:absolute;left:0;top:0;width:100%;height:100%;display:block;";
+          svg.style.cssText = "position:absolute;left:__ICON_LSB__em;top:0;width:__ICON_W__em;height:100%;display:block;";
           svg.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="__VIEWBOX__" style="width:100%;height:100%;display:block"><path d="' + WHALE_PATH + '" fill="#4d6bfe"/><path d="' + BELLY_PATH + '" fill="#ffffff"/></svg>';
           iconTemplate.appendChild(txt);
           iconTemplate.appendChild(svg);
@@ -303,6 +305,8 @@ client = (_js
           .replace('__CSS_STATIC__', css_static)
           .replace('__BASE__', BASE)
           .replace('__ICON_STYLE__', icon_style)
+          .replace('__ICON_LSB__', f"{icon_lsb:.3f}")
+          .replace('__ICON_W__', f"{icon_w:.3f}")
           .replace('__VIEWBOX__', icon_viewbox))
 
 with open(OUT_CLIENT, 'w', encoding='utf-8', newline='\n') as f:

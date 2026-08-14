@@ -79,14 +79,29 @@ dsh plugin --profile web add ./dsh-whale-font
 
    | 参数 | 含义 |
    |---|---|
-   | `scaleX` | 鲸鱼视觉宽度（越大越宽） |
-   | `scaleY` | 鲸鱼视觉高度（越大越高） |
+   | `scaleX` | 鲸鱼图形本身的胖瘦（越大越宽） |
+   | `scaleY` | 鲸鱼图形本身的高低（越大越高） |
    | `yOffset` | 上下位置（越大越往下） |
-   | `advanceWidth` | 鲸鱼在句子里占的宽度槽位（普通字 = 1000） |
-   | `leftBearing` | 鲸鱼头前面的空白（越大鲸鱼越往右） |
+   | `advanceWidth` | 鲸鱼在句子里占的**总宽度槽位**（普通汉字 = 1000） |
+   | `leftBearing` | 鲸鱼图形**左边**的空白（越大鲸鱼越往右） |
 
-3. 运行 `python tune/adjust_whale.py`（自动读取同目录的 `favicon.svg` 和 `whale-config.json`，重新生成字体并写回插件目录）。
+3. 运行 `python tune/adjust_whale.py`（自动读取同目录的 `favicon.svg` 和 `whale-config.json`，重新生成字体并写回已安装插件）。
 4. 浏览器强制刷新即可，**不用重启 DSH**。
+
+### 宽度三参数怎么配合（关键）
+
+鲸鱼图形的实际宽度 = `scaleX × 48.84`（`scaleX=28` 时约 **1367**）。三个宽度参数的关系：
+
+```
+advanceWidth = leftBearing + 图形宽 + 右侧留白
+```
+
+- 想**图形本身变胖/变瘦** → 只改 `scaleX`；
+- 想**鲸鱼整体往右移** → 调大 `leftBearing`；
+- 想**前后文字离得更远** → 调大 `advanceWidth`。
+
+> ⚠️ 务必保证 `advanceWidth ≥ leftBearing + 图形宽`，否则鲸鱼会溢出、和前后文字重叠。
+> 例如 `scaleX=28`（图形宽 1367）、`leftBearing=200` 时，`advanceWidth` 至少要 `200 + 1367 = 1567`（当前默认 1700，右侧留白 133）。
 
 ## 卸载
 
