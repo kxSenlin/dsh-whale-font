@@ -233,13 +233,25 @@ _js = r'''window.__ModuleLoader__.load({
         }
         return false;
       }
-      function processTextNode(node) {
-        if (!inAssistant(node)) return;
-        if (inCode(node)) return;
-        var text = node.nodeValue || "";
-        if (/[我你]/.test(text) === false && text.indexOf("I") === -1 && text.indexOf("me") === -1) return;
+      var inserted = new WeakMap();
+      var suppress = new WeakSet();
+      function stripInserts(node) {
+        var list = inserted.get(node);
+        if (list === undefined) return;
+        for (var s = 0; s < list.length; s++) {
+          var el = list[s];
+          if (el.parentNode !== null) el.parentNode.removeChild(el);
+        }
+        inserted.set(node, []);
+      }
+      function processTextNode(node, fromData) {
+        if (!node || node.nodeType !== 3) return;
         var parent = node.parentElement;
         if (!parent) return;
+        if (!inAssistant(parent)) return;
+        if (inCode(parent)) return;
+        var text = node.nodeValue || "";
+        if (/[我你]/.test(text) === false && text.indexOf("I") === -1 && text.indexOf("me") === -1) { if (fromData) stripInserts(node); return; }
         var frag = document.createDocumentFragment();
         var buf = "";
         var inQuote = false;
@@ -273,7 +285,21 @@ _js = r'''window.__ModuleLoader__.load({
           i++;
         }
         flush();
-        if (changed) { parent.replaceChild(frag, node); }
+        if (!changed) {
+          if (inserted.get(node) === undefined) return;
+          stripInserts(node);
+          return;
+        }
+        stripInserts(node);
+        if (node.nodeValue !== "") {
+          suppress.add(node);
+          node.nodeValue = "";
+        }
+        var pieces = [];
+        while (frag.firstChild !== null) { var c = frag.firstChild; frag.removeChild(c); pieces.push(c); }
+        var ref = node.nextSibling;
+        for (var p = 0; p < pieces.length; p++) parent.insertBefore(pieces[p], ref);
+        inserted.set(node, pieces);
       }
       function processElement(root) {
         if (!root || root.nodeType !== 1) return;
@@ -287,15 +313,23 @@ _js = r'''window.__ModuleLoader__.load({
         for (var mi = 0; mi < muts.length; mi++) {
           var m = muts[mi];
           if (m.type === "childList") {
+            for (var ri = 0; ri < m.removedNodes.length; ri++) {
+              var r = m.removedNodes[ri];
+              if (r.nodeType === 3) stripInserts(r);
+            }
             for (var ai = 0; ai < m.addedNodes.length; ai++) {
               var a = m.addedNodes[ai];
               if (a.nodeType === 3) processTextNode(a);
               else if (a.nodeType === 1) processElement(a);
             }
+          } else if (m.type === "characterData") {
+            if (suppress.has(m.target) && m.target.nodeValue === "") continue;
+            suppress.delete(m.target);
+            processTextNode(m.target, true);
           }
         }
       });
-      observer.observe(document.documentElement, { childList: true, subtree: true });
+      observer.observe(document.documentElement, { childList: true, characterData: true, subtree: true });
       processElement(document.documentElement);
       ctx.effect(function () { return function () { style.remove(); observer.disconnect(); }; });
     }
